@@ -20,6 +20,9 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/
     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
     echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 
-EXPOSE 22
+COPY index.html /index.html
+# Puertos SSH y Web
+EXPOSE 22 10000
 
-CMD ["/usr/sbin/sshd","-D"]
+# Ejecutar SSH y servidor web
+CMD ["sh", "-c", "python3 -m http.server 10000 --bind 0.0.0.0 & exec /usr/sbin/sshd -D"]
